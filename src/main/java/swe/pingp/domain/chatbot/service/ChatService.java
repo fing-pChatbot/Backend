@@ -13,6 +13,7 @@ import swe.pingp.domain.chatbot.dto.response.ChatResponse;
 import swe.pingp.domain.chatbot.dto.response.ChatRoomResponse;
 import swe.pingp.domain.chatbot.dto.response.CreateChatRoomResponse;
 import swe.pingp.domain.chatbot.dto.response.CreateFaqResponse;
+import swe.pingp.domain.chatbot.dto.response.DeleteChatResponse;
 import swe.pingp.domain.chatbot.dto.response.FaqResponse;
 import swe.pingp.domain.chatbot.entity.Chat;
 import swe.pingp.domain.chatbot.entity.ChatRoom;
@@ -69,6 +70,12 @@ public class ChatService {
         return chatResponses;
     }
 
+    public DeleteChatResponse deleteChatRoom(Long roomId) {
+        chatRoomRepository.deleteById(roomId);
+
+        return DeleteChatResponse.from(roomId);
+    }
+
     public List<FaqResponse> findAllFaqs() {
         List<Faq> faqs = faqRepository.findAll();
 
@@ -84,4 +91,5 @@ public class ChatService {
 
         return CreateFaqResponse.from(res);
     }
+
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import swe.pingp.domain.chatbot.dto.response.ChatResponse;
 import swe.pingp.domain.chatbot.dto.response.ChatRoomResponse;
 import swe.pingp.domain.chatbot.dto.response.CreateChatRoomResponse;
 import swe.pingp.domain.chatbot.dto.response.CreateFaqResponse;
+import swe.pingp.domain.chatbot.dto.response.DeleteChatResponse;
 import swe.pingp.domain.chatbot.dto.response.FaqResponse;
 import swe.pingp.domain.chatbot.service.ChatService;
 
@@ -48,6 +50,16 @@ public class ChatController {
         CreateChatRoomResponse chatRoomResponse = chatService.createChatRoom(createChatRoomRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomResponse);
+    }
+
+    /**
+     * 사용자 채팅방 삭제 (채팅 기록 삭제)
+     */
+    @DeleteMapping("/chatroom/{chatroomId}")
+    public ResponseEntity<DeleteChatResponse> deleteChatRoom(@PathVariable("chatroomId") Long roomId) {
+        DeleteChatResponse deleteChatResponse = chatService.deleteChatRoom(roomId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(deleteChatResponse);
     }
 
     /**

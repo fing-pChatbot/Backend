@@ -8,14 +8,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import swe.pingp.domain.chatbot.dto.request.CreateChatRoomRequest;
+import swe.pingp.domain.chatbot.dto.request.CreateFaqRequest;
 import swe.pingp.domain.chatbot.dto.response.ChatResponse;
 import swe.pingp.domain.chatbot.dto.response.ChatRoomResponse;
 import swe.pingp.domain.chatbot.dto.response.CreateChatRoomResponse;
+import swe.pingp.domain.chatbot.dto.response.CreateFaqResponse;
+import swe.pingp.domain.chatbot.dto.response.FaqResponse;
 import swe.pingp.domain.chatbot.entity.Chat;
 import swe.pingp.domain.chatbot.entity.ChatRoom;
+import swe.pingp.domain.chatbot.entity.Faq;
 import swe.pingp.domain.chatbot.entity.Source;
 import swe.pingp.domain.chatbot.repository.ChatRepository;
 import swe.pingp.domain.chatbot.repository.ChatRoomRepository;
+import swe.pingp.domain.chatbot.repository.FaqRepository;
 import swe.pingp.domain.chatbot.repository.GetSource;
 import swe.pingp.domain.chatbot.repository.SourceRepository;
 
@@ -27,6 +32,7 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRepository chatRepository;
     private final SourceRepository sourceRepository;
+    private final FaqRepository faqRepository;
 
     public List<ChatRoomResponse> findAllChatRooms(Long userId) {
         List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(userId);
@@ -61,5 +67,21 @@ public class ChatService {
         }
 
         return chatResponses;
+    }
+
+    public List<FaqResponse> findAllFaqs() {
+        List<Faq> faqs = faqRepository.findAll();
+
+        return faqs.stream()
+                .map(FaqResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    public CreateFaqResponse createFaq(CreateFaqRequest createFaqRequest) {
+        Faq faq = Faq.toEntity(createFaqRequest);
+
+        Faq res = faqRepository.save(faq);
+
+        return CreateFaqResponse.from(res);
     }
 }

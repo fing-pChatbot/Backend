@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import swe.pingp.domain.chatbot.dto.request.CreateChatRoomRequest;
+import swe.pingp.domain.chatbot.dto.request.CreateFaqRequest;
 import swe.pingp.domain.chatbot.dto.response.ChatResponse;
 import swe.pingp.domain.chatbot.dto.response.ChatRoomResponse;
 import swe.pingp.domain.chatbot.dto.response.CreateChatRoomResponse;
+import swe.pingp.domain.chatbot.dto.response.CreateFaqResponse;
+import swe.pingp.domain.chatbot.dto.response.FaqResponse;
 import swe.pingp.domain.chatbot.service.ChatService;
 
 @Slf4j
@@ -56,5 +59,27 @@ public class ChatController {
         List<ChatResponse> chats = chatService.findChatByRoomId(roomId);
 
         return ResponseEntity.status(HttpStatus.OK).body(chats);
+    }
+
+    /**
+     * FAQ 조회
+     */
+    @GetMapping("/faq")
+    public ResponseEntity<List<FaqResponse>> getFaqs(@RequestParam Long userId) {
+
+        List<FaqResponse> faqs = chatService.findAllFaqs();
+
+        return ResponseEntity.status(HttpStatus.OK).body(faqs);
+    }
+
+    /**
+     * FAQ 생성
+     */
+    @PostMapping("/faq")
+    public ResponseEntity<CreateFaqResponse> createFaq(@RequestBody CreateFaqRequest createFaqRequest) {
+
+        CreateFaqResponse faqResponse = chatService.createFaq(createFaqRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(faqResponse);
     }
 }
